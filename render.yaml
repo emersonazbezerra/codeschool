@@ -19,7 +19,7 @@ services:
 
   - type: web
     name: codeschool-frontend
-    runtime: static
+    env: static
     rootDir: CodeSchool.Frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
