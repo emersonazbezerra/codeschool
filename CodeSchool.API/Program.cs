@@ -49,14 +49,19 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "http://localhost:5174")
+        var allowedOrigins = new List<string> { "http://localhost:5173", "http://localhost:5174" };
+        var envOrigins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS");
+        if (!string.IsNullOrEmpty(envOrigins))
+            allowedOrigins.AddRange(envOrigins.Split(','));
+
+        policy.WithOrigins([.. allowedOrigins])
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
 });
 
 // Configurar autenticação JWT
-var jwtKey = "ChaveSecretaSuperSegura123!@#CodeSchool2024";
+var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? "ChaveSecretaSuperSegura123!@#CodeSchool2024";
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
