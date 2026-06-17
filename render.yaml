@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: codeschool-api
+    env: docker
+    dockerfilePath: ./CodeSchool.API/Dockerfile
+    dockerContext: ./CodeSchool.API
+    envVars:
+      - key: ASPNETCORE_URLS
+        value: http://+:$PORT
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: JWT_KEY
+        generateValue: true
+      - key: ALLOWED_ORIGINS
+        value: https://codeschool-web.onrender.com
+
+  - type: web
+    name: codeschool-web
+    env: static
+    rootDir: CodeSchool.Frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://codeschool-api.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

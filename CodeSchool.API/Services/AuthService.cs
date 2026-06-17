@@ -27,7 +27,7 @@ namespace CodeSchool.API.Services
             };
 
             var chave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                _configuration["Jwt:Key"] ?? "ChaveSecretaSuperSegura123!@#CodeSchool2024"
+                Environment.GetEnvironmentVariable("JWT_KEY") ?? "ChaveSecretaSuperSegura123!@#CodeSchool2024"
             ));
 
             var credenciais = new SigningCredentials(chave, SecurityAlgorithms.HmacSha256);

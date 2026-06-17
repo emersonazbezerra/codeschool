@@ -2,7 +2,12 @@ import axios from 'axios'
 
 // Configuração base da API
 const api = axios.create({
-  baseURL: 'http://localhost:5299/api',
+  baseURL: (() => {
+    const host = import.meta.env.VITE_API_BASE_URL
+    if (!host) return 'http://localhost:5299/api'
+    const base = host.startsWith('http') ? host : `https://${host}`
+    return `${base}/api`
+  })(),
   headers: {
     'Content-Type': 'application/json'
   }
